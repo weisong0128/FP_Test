@@ -1,5 +1,7 @@
 package com.java.pojo;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * description: 用户信息类(8个字段)
  * author: ws
@@ -18,10 +20,12 @@ public class UserInfo {
     /**
      * 用户名
      */
+    @ApiModelProperty(value = "用户名")
     private String userName;
     /**
      * 用户密码
      */
+    @ApiModelProperty(value = "密码")
     private String userPassword;
     /**
      * 用户角色
