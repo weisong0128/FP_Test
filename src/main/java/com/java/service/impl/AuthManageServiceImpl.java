@@ -37,6 +37,7 @@ public class AuthManageServiceImpl implements AuthManageService{
      */
     @Override
     public List<AuthManage> getAllAuthManage(Page page, AuthManage authManage) {
-        return null;
+
+        return authManageDao.getAllAuthManage(page, authManage);
     }
 }

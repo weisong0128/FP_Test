@@ -51,7 +51,6 @@ public class AuthManage {
     @ApiModelProperty(value = "查询结束时间", name = "endTime", dataType = "String")
     private String endTime;
 
-
     public AuthManage(String uuid, String projectName, String envirHead, String phone, String provinces, String cities, String address, String mac, String masterIp, String downloadTime, String envirNote, String snFile, String feedback, String note, String createTime, String updateTime, String isAvailable) {
         this.uuid = uuid;
         this.projectName = projectName;
@@ -72,7 +71,17 @@ public class AuthManage {
         this.isAvailable = isAvailable;
     }
 
-
+    /**
+     * 用于根据条件查询
+     * @param projectName
+     * @param cities
+     * @param envirNote
+     * @param feedback
+     * @param keyWord
+     * @param sortField
+     * @param startTime
+     * @param endTime
+     */
     public AuthManage(String projectName, String cities, String envirNote, String feedback, String keyWord, String sortField, String startTime, String endTime) {
         this.projectName = projectName;
         this.cities = cities;

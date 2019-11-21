@@ -2,6 +2,7 @@ package com.java.controller;
 
 import com.java.pojo.AuthManage;
 import com.java.service.AuthManageService;
+import com.java.util.Page;
 import com.java.util.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,4 +33,13 @@ public class AuthManageController {
         //ok里的参数是daoimpl层对应方法的返回值!然后将这个返回值作为ok()方法的实参！再返回ok()方法.
         return Response.ok(authManageService.createAuthManage(authManage));
     }
+
+    @ApiOperation(value = "获取授权管理列表", notes = "获取授权管理列表")
+    @RequestMapping(value = "getAllAuthManage", method = RequestMethod.GET)
+    public Response getAllAuthManage(Page page, String projectName, String cities, String envirNote, String feedback, String keyWord, String sortField, String startTime, String endTime){
+    //方法中传参为前端页面传递的条件查询参数值
+        AuthManage authManage = new AuthManage(projectName,cities,envirNote,feedback,keyWord,sortField,startTime,endTime);
+        return Response.ok(authManageService.getAllAuthManage(page,authManage));    //data类型为List
+    }
+
 }

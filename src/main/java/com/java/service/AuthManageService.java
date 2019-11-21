@@ -27,4 +27,6 @@ public interface AuthManageService {
      */
     List<AuthManage> getAllAuthManage(Page page, AuthManage authManage);
 
+
+
 }
