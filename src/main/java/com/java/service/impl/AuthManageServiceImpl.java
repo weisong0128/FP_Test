@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * description:
@@ -37,7 +38,35 @@ public class AuthManageServiceImpl implements AuthManageService{
      */
     @Override
     public List<AuthManage> getAllAuthManage(Page page, AuthManage authManage) {
-
         return authManageDao.getAllAuthManage(page, authManage);
+    }
+
+    /**
+     * 修改和删除授权
+     * @param parames
+     * @return
+     */
+    @Override
+    public int updateAndDelete(Map<String, Object> parames) {
+        return authManageDao.updateAndDelete(parames);
+    }
+
+    /**
+     * 获取所有项目名称
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getAllPjName() {
+        return authManageDao.getAllPjName();
+    }
+
+    /**
+     * 获取所有的安装地市
+     * @param pjName
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getAllCities(String pjName) {
+        return authManageDao.getAllCities(pjName);
     }
 }

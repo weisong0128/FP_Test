@@ -35,3 +35,15 @@ create table `fp_auth_management` (
 	) ENGINE=InnoDB default CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 da5988b2-5982-4a85-a364-8164e156	CCP	王建武	12345678912	甘肃	临夏	甘肃临夏	AC:1F:6B:4C:02:02	15.180.153.21	20190404	0	au_key_CCASDASDZZ44500A1110010SX_20190404
+
+INSERT INTO `fp`.`fp_auth_management` (`uuid`, `project_name`, `envir_head`, `phone`, `provinces`, `cities`, `address`, `mac`, `master_ip`, `download_time`, `envir_note`, `sn_file`, `feedback`, `note`, `create_time`, `update_time`, `is_available`) VALUES ('da5988b2-5982-4a85-a364-8164e156', 'CCP', '王建武', '12345678912', '甘肃', '临夏', '甘肃临夏', 'AC:1F:6B:4C:02:02', '15.180.153.21', '20190404', '0', 'au_key_CCASDASDZZ44500A1110010SX_20190404', NULL, NULL, NULL, NULL, '0');
+INSERT INTO `fp`.`fp_auth_management` (`uuid`, `project_name`, `envir_head`, `phone`, `provinces`, `cities`, `address`, `mac`, `master_ip`, `download_time`, `envir_note`, `sn_file`, `feedback`, `note`, `create_time`, `update_time`, `is_available`) VALUES ('5043b1b2035e4fb3a655a35ce4d90d6e', 'HC', '吴励书2', NULL, '江苏', '南京', '江苏省厅', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-21 08:46:53', '2019-11-27 00:54:54.003', '0');
+INSERT INTO `fp`.`fp_auth_management` (`uuid`, `project_name`, `envir_head`, `phone`, `provinces`, `cities`, `address`, `mac`, `master_ip`, `download_time`, `envir_note`, `sn_file`, `feedback`, `note`, `create_time`, `update_time`, `is_available`) VALUES ('0bbfd182f367489b9e440773e0667ffd', '公安大数据平台', '王真', '15951612789', '山西', '太原', '山西省厅', '1B-2C-3D-4F-5E', '47.1.1.3', '20191120', NULL, NULL, NULL, NULL, '2019-11-27 17:02:45', NULL, '0');
+INSERT INTO `fp`.`fp_auth_management` (`uuid`, `project_name`, `envir_head`, `phone`, `provinces`, `cities`, `address`, `mac`, `master_ip`, `download_time`, `envir_note`, `sn_file`, `feedback`, `note`, `create_time`, `update_time`, `is_available`) VALUES ('51506220632c413a9d6e9bca1ae95698', '公安大数据平台', '王真', '15951612789', '四川', '成都', '四川省厅', '1B-2C-3D-4F-5E', '47.1.1.3', '20191120', NULL, NULL, NULL, NULL, '2019-11-27 17:05:05', NULL, '0');
+
+
+
+
+
+
+

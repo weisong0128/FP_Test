@@ -29,23 +29,27 @@ public class AuthManageDaoImpl implements AuthManageDao{
     /**
      * 新增授权信息
      * @param authManage
-     * @return
+     * @return 返回一个uuid值, String类型
      */
     @Override
     public String createAuthManage(AuthManage authManage) {
+        //总共需添加的16个字段值，去掉三个自动生成值、再去掉三个合为一个字段值，共需在界面添加11个字段值，正好对上实际界面！！！
         StringBuilder sql = new StringBuilder("INSERT INTO `fp_auth_management`(`uuid`, `project_name`, `envir_head`, `phone`, `provinces`, `cities`, `address`, `mac`," +
                 " `master_ip`, `download_time`, `envir_note`, `sn_file`, `feedback`, `note`, `create_time`, `update_time`) VALUES (:uuid, :projectName, :envirHead, :phone, :provinces, :cities, :address, :mac," +
                 " :masterIp, :downloadTime, :envirNote, :snFile, :feedback, :note, :createTime, :updateTime)");
-
-        //指定部分字段值
+        //VALUES后对应的这里具名参数，(其实是pojo实体类的局部变量（属性）)，正常执行sql后VALUES后对应的字段值，会从pojo类中获取这些具名参数的get方法
+        //`provinces`, `cities`, `address`, 在界面新增模块中三合一
+        //指定或自动生成部分字段值uuid,createtime,updatetime,
         authManage.setUuid(UUID.randomUUID().toString().replaceAll("-",""));
         authManage.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         authManage.setUpdateTime(null);
 
         //EntityMapTransUtils.entityToMap1(authManage)实体类转map
+        //update()会从map的get方法中从key(pojo属性)获取界面添加的值
         int count = namedParameterJdbcTemplate.update(sql.toString(), EntityMapTransUtils.entityToMap1(authManage));
         if (count > 0){
             System.out.println("authManage.getUuid()值为" + authManage.getUuid());
+            System.out.println("authManage.getProjectName()值为" + authManage.getProjectName());
             return authManage.getUuid();
         } else {
             return "0";
@@ -57,7 +61,7 @@ public class AuthManageDaoImpl implements AuthManageDao{
      * 获取所有授权信息（包括条件查询）
      * @param page
      * @param authManage
-     * @return
+     * @return  正常返回10条数据
      */
     @Override
     public List<AuthManage> getAllAuthManage(Page page, AuthManage authManage) {
@@ -74,7 +78,7 @@ public class AuthManageDaoImpl implements AuthManageDao{
         if(page!=null){ //页数，每页多少行数据是前端设定的，默认page=null,即展示首页，如果界面点击第2页，则接口中传参page=2，以此类推
             map = concatSql(countsql, authManage);  //同上，无额外条件返回数据总量，有条件，返回带条件后的数据总量，按精确条件查询返回的数据量条数
             countsql = (StringBuilder) map.get("sql");  //封装后的sql
-            List<Map<String, Object>> count = namedParameterJdbcTemplate.queryForList(countsql.toString(), parames);    //以parames类型统计封装后的数据量
+            List<Map<String, Object>> count = namedParameterJdbcTemplate.queryForList(countsql.toString(), parames);    //获取parames get方法中具体的参数值传入countsql.toString()中，具名参数中需要哪个值就从parames中get到具体的值!
             if (count.get(0).get("totalrows") != null){
                 int total = Integer.valueOf(count.get(0).get("totalrows").toString());
                 page.setTotalRows(total);       //总条数
@@ -82,14 +86,86 @@ public class AuthManageDaoImpl implements AuthManageDao{
             //加上分页查询
             sql.append(" limit " + page.getRowStart() + "," + page.getPageSize());  //   分别是前端指定那一页的起始行,那一页的返回条数,意思就是指定前端界面选取那一页的进行查询，返回那一页的全部数据
         }
+//        int listSize = namedParameterJdbcTemplate.query(sql.toString(), parames, new BeanPropertyRowMapper<>(AuthManage.class)).size();
+//        System.out.println("查询的数据条数为：" + listSize);
         return namedParameterJdbcTemplate.query(sql.toString(), parames, new BeanPropertyRowMapper<>(AuthManage.class));
     }
 
+    /**
+     * 修改和删除授权功能
+     * @param parames = EntityMapTransUtils.entityToMap1(authManage) 代表pojo类的map形式，values已经存在，由key获取
+     * @return  返回int类型
+     */
+    @Override
+    public int updateAndDelete(Map<String, Object> parames) {
+        StringBuilder sql = null;
+        if (parames.get("uuids") != null){  //情况一：删除指定uuid的授权信息
+            sql = new StringBuilder("update fp_auth_management set is_available = '1' where uuid in (:uuids)");
+        } else {    //情况二：修改指定uuid的授权信息
+            parames.put("updateTime", new Date());  //自动获取现在的更新时间
+            sql = new StringBuilder("update fp_auth_management set `project_name` = :projectName ," +
+                    " `envir_head` = :envirHead ," +
+                    " `phone` = :phone ," +
+                    " `provinces` = :provinces ," +
+                    " `cities` = :cities ," +
+                    " `address` = :address ," +
+                    " `mac` = :mac ," +
+                    " `master_ip` = :masterIp ," +
+                    " `download_time` = :downloadTime ," +
+                    " `envir_note` = :envirNote ," +
+                    " `sn_file` = :snFile ," +
+                    " `feedback` = :feedback ," +
+                    " `note` = :note ," +
+                    " `update_time` = :updateTime " +
+                    " where uuid = :uuid");
+        }   //接口传参一定要指定uuid值，然后每个字段值都需要在传一遍，不能只传需要更改的参数值
+        int updateInt = namedParameterJdbcTemplate.update(sql.toString(), parames);
+        System.out.println("更新数据返回值：" + updateInt);
+        return namedParameterJdbcTemplate.update(sql.toString(), parames);
+    }
 
+    /**
+     * 获取所有项目名称
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getAllPjName() {
+        StringBuilder sql = new StringBuilder("select distinct project_name from fp_auth_management where is_available !='1' ");
 
+//        List<Map<String, Object>> list = namedParameterJdbcTemplate.queryForList(sql.toString(), new HashMap<>());
+//        for (Map<String, Object> map : list) {
+//            for (String s : map.keySet()) {
+//                System.out.println("获取项目名有：" + map.get(s) + " ");
+//            }
+//        }
+//        System.out.println("==============================");
 
+        return namedParameterJdbcTemplate.queryForList(sql.toString(), new HashMap<>());    //因为不用传参，所以这里new一个对应的Map对象即可
+    }
 
+    /**
+     * 获取所有的安装地市
+     * @param pjName
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getAllCities(String pjName) {
+        StringBuilder sql = new StringBuilder("select distinct cities from fp_auth_management where is_available !='1' ");
+        Map map = new HashMap();
+        if (StringUtils.isNotBlank(pjName)){
+            map.put("pjName", pjName);
+            sql.append(" and project_name = :pjName");  //指定项目名称 查询所在的地市有哪些
+        }
 
+//        List<Map<String, Object>> list = namedParameterJdbcTemplate.queryForList(sql.toString(), map);
+//        for (Map<String, Object> map1 : list) {
+//            for (String s : map1.keySet()){
+//                System.out.println("根据项目名获取的地市有：" + map1.get(s) + " ");
+//            }
+//        }
+
+        return namedParameterJdbcTemplate.queryForList(sql.toString(), map);    //需要的传参从map中获取
+    }
 
 
     /**

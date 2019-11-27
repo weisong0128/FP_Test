@@ -4,6 +4,7 @@ import com.java.pojo.AuthManage;
 import com.java.util.Page;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: 授权管理dao层
@@ -26,4 +27,26 @@ public interface AuthManageDao {
      * @return
      */
     List<AuthManage> getAllAuthManage(Page page, AuthManage authManage);
+
+    /**
+     * 修改和删除授权功能
+     * @param parames
+     * @return
+     */
+    int updateAndDelete(Map<String, Object> parames);
+
+    /**
+     * 获取所有项目名称
+     * @return
+     */
+    List<Map<String, Object>> getAllPjName();
+
+
+    /**
+     * 获取所有的安装地市
+     * @param pjName
+     * @return
+     */
+    List<Map<String, Object>> getAllCities(String pjName);
+
 }
